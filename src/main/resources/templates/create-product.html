@@ -9,7 +9,7 @@
     <link href='https://bootstraptema.ru/snippets/form/2017/recaptcha/custom.css' rel='stylesheet' type='text/css'>
 </head>
 <body>
-<form action="/admin-create-product" method="post">
+<form action="/admin/create/product" method="post">
 <div class="container">
 
     <div class="row">
@@ -44,6 +44,14 @@
                             <div class="form-group">
                                 <label for="form_lastname">Старая Цена товара</label>
                                 <input id="form_backprice" type="text" name="backprice" class="form-control" placeholder="Please enter your price" required="required">
+                                <div class="help-block with-errors"></div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="form_lastname">Ссылка на фото</label>
+                                <input id="form_image" type="text" name="image" class="form-control" placeholder="Please enter photo" required="required">
                                 <div class="help-block with-errors"></div>
                             </div>
                         </div>

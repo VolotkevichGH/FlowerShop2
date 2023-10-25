@@ -1,41 +1,94 @@
 package com.example.FlowerShop.controllers;
 
 import com.example.FlowerShop.models.Product;
+import com.example.FlowerShop.models.User;
 import com.example.FlowerShop.repo.ProductRepository;
-import com.example.FlowerShop.services.ProductService;
+import com.example.FlowerShop.repo.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
+import java.awt.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
 @Controller
 @RequiredArgsConstructor
 public class ProductController {
 
-    private final ProductService productService;
     private final ProductRepository productRepository;
+    private final UserRepository userRepository;
 
-    @GetMapping("/admin-create-product")
-    public String createProduct(Model model){
-        return "create-product";
+    @GetMapping("/shop")
+    public String adminGet(Model model) {
+        String name = SecurityContextHolder.getContext().getAuthentication().getName();
+        boolean userIsActive = userRepository.findByUsername(name).isPresent();
+        if (userIsActive) {
+            User user = userRepository.findByUsername(name).get();
+            int userProducts = user.getProducts().size();
+            model.addAttribute("items", userProducts);
+            model.addAttribute("user", user);
+            List<Product> myProducts = user.getProducts();
+            model.addAttribute("myProd", myProducts);
+            float totalPrice = 0f;
+            for (Product product : myProducts) {
+                totalPrice += product.getPrice();
+            }
+            model.addAttribute("totalPrice", totalPrice);
+        } else {
+            model.addAttribute("items", 0);
+        }
+        model.addAttribute("products", productRepository.findAll());
+        return "shop";
     }
 
-    @PostMapping("/admin-create-product")
-    public String createPost(Model model, @RequestParam Long backprice, @RequestParam String title, @RequestParam Long price, @RequestParam String description) {
-       Product product = new Product();
-       product.setName(title);
-       product.setPrice(price);
-       product.setDescription(description);
-       product.setBackprice(backprice);
-        productService.saveProduct(product);
-        return "redirect:/admin";
+    @PostMapping("/add-product/{product}")
+    public String addProductToCart(@PathVariable Product product) {
+        String name = SecurityContextHolder.getContext().getAuthentication().getName();
+        boolean userIsActive = userRepository.findByUsername(name).isPresent();
+        if (userIsActive) {
+            User user = userRepository.findByUsername(name).get();
+            if (user.getProducts().isEmpty()) {
+                ArrayList<Product> products = new ArrayList<>();
+                products.add(product);
+                user.setProducts(products);
+                userRepository.save(user);
+            } else {
+                if (user.getProducts().contains(product)) {
+
+                    productRepository.save(product);
+                } else {
+                    user.getProducts().add(product);
+                    userRepository.save(user);
+                }
+            }
+        } else {
+            return "redirect:/login";
+        }
+        return "redirect:/shop";
     }
 
 
+    @PostMapping("/cart/{user}")
+    public String cartGet(Model model, @PathVariable User user) {
+        List<Product> myProducts = user.getProducts();
+        model.addAttribute("products", myProducts);
+        return "redirect:/cart";
+    }
 
+    @GetMapping("/cart")
+    public String cartGet1(Model model) {
+        String name = SecurityContextHolder.getContext().getAuthentication().getName();
+        User user = userRepository.findByUsername(name).get();
+        List<Product> myProducts = user.getProducts();
+        model.addAttribute("products", myProducts);
+        return "cart";
+    }
 }

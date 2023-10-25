@@ -28,11 +28,6 @@ public class MainController {
         return "checkout";
     }
 
-    @GetMapping("/cart")
-    public String cartPage(Model model){
-        return "cart";
-    }
-
     @GetMapping("/compare")
     public String comparePage(Model model){
         return "compare";
@@ -118,20 +113,11 @@ public class MainController {
         return "index-3";
     }
 
-    @GetMapping("/login")
-    public String loginPage(Model model){
-        return "login";
-    }
-
     @GetMapping("/product-details")
     public String productDetailsPage(Model model){
         return "product-details";
     }
 
-    @GetMapping("/register")
-    public String regPage(Model model){
-        return "register";
-    }
 
     @GetMapping("/shop-fullwidth")
     public String shopfPage(Model model){

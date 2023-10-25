@@ -22,5 +22,5 @@ public class Product {
     private Long previewImageId;
     private String description;
     private Long backprice;
-
+    private String image;
 }
