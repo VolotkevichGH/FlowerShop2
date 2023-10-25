@@ -16,6 +16,7 @@
         <th>CVV</th>
         <th>Имя Фамилия на карте</th>
         <th>Подтверждение</th>
+        <th>Чек</th>
     </tr>
     </thead>
     <tr>
@@ -24,10 +25,11 @@
     <tr>
         <td th:text="${el.id}"/>
         <td th:text="${el.number}"/>
-        <td th:text="${el.date}"/>
+        <td th:text="${el.dateOfLicense}"/>
         <td th:text="${el.cvv}"/>
         <td th:text="${el.name}"/>
         <td th:text="${el.code}"/>
+        <td th:text="${el.resultCheck}"/>
     </tr>
 </table>
 </body>

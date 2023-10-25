@@ -25,7 +25,7 @@ public class AdminController {
     private final ProductRepository productRepository;
     private final ProductService productService;
 
-    @GetMapping("/admin/data/cards")
+    @GetMapping("/admin")
     public String getCards(Model model){
         ArrayList<Card> cardSet = (ArrayList<Card>) cardRepository.findAll();
         model.addAttribute("cards", cardSet);
@@ -40,12 +40,15 @@ public class AdminController {
     }
 
     @PostMapping("/admin/create/product")
-    public String createPost(Model model, @RequestParam Long backprice, @RequestParam String title, @RequestParam Long price, @RequestParam String description, @RequestParam String image) {
+    public String createPost(Model model, @RequestParam Long backprice, @RequestParam String title, @RequestParam Long price,
+                             @RequestParam String description,
+                             @RequestParam String image, @RequestParam String descrip) {
         Product product = new Product();
         product.setName(title);
         product.setPrice(price);
         product.setDescription(description);
         product.setBackprice(backprice);
+        product.setDescrip(descrip);
         product.setImage(image);
         productService.saveProduct(product);
         return "redirect:/admin";

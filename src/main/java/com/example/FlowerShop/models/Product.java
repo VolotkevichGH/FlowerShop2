@@ -19,6 +19,7 @@ public class Product {
     private Long id;
     private String name;
     private Long price;
+    private String descrip;
     private Long previewImageId;
     private String description;
     private Long backprice;

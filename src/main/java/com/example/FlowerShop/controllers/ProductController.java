@@ -11,6 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -109,4 +110,15 @@ public class ProductController {
         userRepository.save(user);
         return "redirect:/cart";
     }
+
+    @GetMapping("/product/details/{product}")
+    public String getProductDetails(@PathVariable("product") Long idProduct, Model model){
+        Product product = productRepository.findById(idProduct).get();
+        String name = SecurityContextHolder.getContext().getAuthentication().getName();
+        User user = userRepository.findByUsername(name).get();
+        model.addAttribute("product", product);
+        model.addAttribute("user", user);
+        return "product-details";
+    }
+
 }

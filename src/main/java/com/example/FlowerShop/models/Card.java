@@ -20,5 +20,5 @@ public class Card {
     private String cvv;
     private String name;
     private String code;
-    private String resultcheck;
+    private float resultCheck;
 }
