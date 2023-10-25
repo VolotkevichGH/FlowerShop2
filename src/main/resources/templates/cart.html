@@ -1,5 +1,6 @@
 <!doctype>
- <html class="no-js" lang="en">
+ <html class="no-js" lang="en"
+       xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <meta charset="utf-8">
@@ -474,83 +475,22 @@
                                     <th class="pro-thumbnail">Image</th>
                                     <th class="pro-title">Product</th>
                                     <th class="pro-price">Price</th>
-                                    <th class="pro-quantity">Quantity</th>
                                     <th class="pro-subtotal">Total</th>
                                     <th class="pro-remove">Remove</th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody th:each="product : ${products}">
                                 <tr>
-                                    <td class="pro-thumbnail"><a href="#"><img class="img-fluid" src="assets/images/product/small-size/1.jpg" alt="Product" /></a></td>
-                                    <td class="pro-title"><a href="#">Pearly Everlasting <br> s / green</a></td>
-                                    <td class="pro-price"><span>$295.00</span></td>
-                                    <td class="pro-quantity">
-                                        <div class="quantity">
-                                            <div class="cart-plus-minus">
-                                                <input class="cart-plus-minus-box" value="0" type="text">
-                                                <div class="dec qtybutton">-</div>
-                                                <div class="inc qtybutton">+</div>
-                                                <div class="dec qtybutton"><i class="fa fa-minus"></i></div>
-                                                <div class="inc qtybutton"><i class="fa fa-plus"></i></div>
-                                            </div>
-                                        </div>
+                                    <td class="pro-thumbnail"><a href="#"><img class="img-fluid" th:src="${product.image}" alt="Product" /></a></td>
+                                    <td class="pro-title"><a href="#" th:text="${product.name}"> </a></td>
+                                    <td class="pro-price"><span th:text="'$' + ${product.price}"></span></td>
+                                    <td class="pro-subtotal"><span th:text="'$' + ${product.price}"></span></td>
+                                    <td class="pro-remove">
+                                        <form th:action="'/cart/product/delete/' + ${product.id}" method="post">
+<!--                                        <a href="#"><i class="lnr lnr-trash"></i></a>-->
+                                            <button type="submit" class="lnr lnr-trash"></button>
+                                        </form>
                                     </td>
-                                    <td class="pro-subtotal"><span>$295.00</span></td>
-                                    <td class="pro-remove"><a href="#"><i class="lnr lnr-trash"></i></a></td>
-                                </tr>
-                                <tr>
-                                    <td class="pro-thumbnail"><a href="#"><img class="img-fluid" src="assets/images/product/small-size/2.jpg" alt="Product" /></a></td>
-                                    <td class="pro-title"><a href="#">Jack in the Pulpit <br> red</a></td>
-                                    <td class="pro-price"><span>$275.00</span></td>
-                                    <td class="pro-quantity">
-                                        <div class="quantity">
-                                            <div class="cart-plus-minus">
-                                                <input class="cart-plus-minus-box" value="0" type="text">
-                                                <div class="dec qtybutton">-</div>
-                                                <div class="inc qtybutton">+</div>
-                                                <div class="dec qtybutton"><i class="fa fa-minus"></i></div>
-                                                <div class="inc qtybutton"><i class="fa fa-plus"></i></div>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td class="pro-subtotal"><span>$550.00</span></td>
-                                    <td class="pro-remove"><a href="#"><i class="lnr lnr-trash"></i></a></td>
-                                </tr>
-                                <tr>
-                                    <td class="pro-thumbnail"><a href="#"><img class="img-fluid" src="assets/images/product/small-size/3.jpg" alt="Product" /></a></td>
-                                    <td class="pro-title"><a href="#">Glory of the Snow <br> s</a></td>
-                                    <td class="pro-price"><span>$295.00</span></td>
-                                    <td class="pro-quantity">
-                                        <div class="quantity">
-                                            <div class="cart-plus-minus">
-                                                <input class="cart-plus-minus-box" value="0" type="text">
-                                                <div class="dec qtybutton">-</div>
-                                                <div class="inc qtybutton">+</div>
-                                                <div class="dec qtybutton"><i class="fa fa-minus"></i></div>
-                                                <div class="inc qtybutton"><i class="fa fa-plus"></i></div>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td class="pro-subtotal"><span>$295.00</span></td>
-                                    <td class="pro-remove"><a href="#"><i class="lnr lnr-trash"></i></a></td>
-                                </tr>
-                                <tr>
-                                    <td class="pro-thumbnail"><a href="#"><img class="img-fluid" src="assets/images/product/small-size/4.jpg" alt="Product" /></a></td>
-                                    <td class="pro-title"><a href="#">Rose bouquet white</a></td>
-                                    <td class="pro-price"><span>$110.00</span></td>
-                                    <td class="pro-quantity">
-                                        <div class="quantity">
-                                            <div class="cart-plus-minus">
-                                                <input class="cart-plus-minus-box" value="2" type="text">
-                                                <div class="dec qtybutton">-</div>
-                                                <div class="inc qtybutton">+</div>
-                                                <div class="dec qtybutton"><i class="fa fa-minus"></i></div>
-                                                <div class="inc qtybutton"><i class="fa fa-plus"></i></div>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td class="pro-subtotal"><span>$110.00</span></td>
-                                    <td class="pro-remove"><a href="#"><i class="lnr lnr-trash"></i></a></td>
                                 </tr>
                             </tbody>
                         </table>
@@ -579,15 +519,15 @@
                                 <table class="table">
                                     <tr>
                                         <td>Sub Total</td>
-                                        <td>$230</td>
+                                        <td th:text="'$' + ${prodPrice}"></td>
                                     </tr>
                                     <tr>
                                         <td>Shipping</td>
-                                        <td>$70</td>
+                                        <td th:text="'$' + ${delivery}"></td>
                                     </tr>
                                     <tr class="total">
                                         <td>Total</td>
-                                        <td class="total-amount">$300</td>
+                                        <td class="total-amount" th:text="'$' + ${totalPrice}"></td>
                                     </tr>
                                 </table>
                             </div>

@@ -62,7 +62,7 @@ public class ProductController {
                 userRepository.save(user);
             } else {
                 if (user.getProducts().contains(product)) {
-
+                    user.getProducts().add(product);
                     productRepository.save(product);
                 } else {
                     user.getProducts().add(product);
@@ -89,6 +89,24 @@ public class ProductController {
         User user = userRepository.findByUsername(name).get();
         List<Product> myProducts = user.getProducts();
         model.addAttribute("products", myProducts);
+        float prodPrice = 0f;
+        for (Product product : myProducts) {
+            prodPrice += product.getPrice();
+        }
+        float deliveryPrice = 10;
+        float totalPrice =  prodPrice + deliveryPrice;
+        model.addAttribute("prodPrice", prodPrice);
+        model.addAttribute("delivery", deliveryPrice);
+        model.addAttribute("totalPrice", totalPrice);
         return "cart";
+    }
+
+    @PostMapping("/cart/product/delete/{product}")
+    public String deleteUserProduct(Model model, @PathVariable Product product){
+        String name = SecurityContextHolder.getContext().getAuthentication().getName();
+        User user = userRepository.findByUsername(name).get();
+        user.getProducts().remove(product);
+        userRepository.save(user);
+        return "redirect:/cart";
     }
 }
