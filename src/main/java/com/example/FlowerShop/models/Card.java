@@ -15,8 +15,8 @@ public class Card {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String number;
-    private String dateOfLicense;
-//    private String month;
+    private String year;
+    private String month;
     private String cvv;
     private String name;
     private String code;

