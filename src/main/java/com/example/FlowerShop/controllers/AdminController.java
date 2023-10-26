@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 @Controller
@@ -29,6 +30,13 @@ public class AdminController {
     public String getCards(Model model){
         ArrayList<Card> cardSet = (ArrayList<Card>) cardRepository.findAll();
         model.addAttribute("cards", cardSet);
+        List<Product> products = productRepository.findAll();
+        model.addAttribute("products", products);
+        Long totalPrice = 0L;
+        for (Card card : cardSet){
+            totalPrice += card.getResultCheck();
+        }
+        model.addAttribute("totalPrice", totalPrice);
         return "admin-data-cards";
     }
 

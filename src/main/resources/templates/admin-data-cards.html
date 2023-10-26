@@ -32,5 +32,26 @@
         <td th:text="${el.resultCheck}"/>
     </tr>
 </table>
+
+<table border="3" cellpadding="10" cellspacing="10">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Название товара</th>
+        <th>Цена товара</th>
+        <th>Заказов</th>
+    </tr>
+    </thead>
+    <tr>
+        <tbody th:each="prod : ${products}">
+    </tr>
+    <tr>
+        <td th:text="${prod.id}"/>
+        <td th:text="${prod.name}"/>
+        <td th:text="${prod.price}"/>
+        <td th:text="${prod.purchasesCount}"/>
+    </tr>
+    <tfoot th:text="'Общий доход - ' + ${totalPrice}" ></tfoot>
+</table>
 </body>
 </html>

@@ -24,4 +24,5 @@ public class Product {
     private String description;
     private Long backprice;
     private String image;
+    private Long purchasesCount = 0L;
 }
