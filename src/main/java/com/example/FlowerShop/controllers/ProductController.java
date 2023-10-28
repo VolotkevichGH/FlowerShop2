@@ -1,5 +1,7 @@
 package com.example.FlowerShop.controllers;
 
+import com.example.FlowerShop.TelegramBot.BotConfig;
+import com.example.FlowerShop.TelegramBot.TelegramBot;
 import com.example.FlowerShop.models.Product;
 import com.example.FlowerShop.models.User;
 import com.example.FlowerShop.repo.ProductRepository;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -26,6 +29,8 @@ public class ProductController {
 
     private final ProductRepository productRepository;
     private final UserRepository userRepository;
+    private final TelegramBot bot;
+    private final BotConfig config;
 
     @GetMapping("/shop")
     public String adminGet(Model model) {
@@ -78,9 +83,16 @@ public class ProductController {
 
 
     @PostMapping("/cart/{user}")
-    public String cartGet(Model model, @PathVariable User user) {
+    public String cartGet(Model model, @PathVariable User user) throws TelegramApiException {
         List<Product> myProducts = user.getProducts();
         model.addAttribute("products", myProducts);
+        long totalPrice = 0;
+        for (Product product : myProducts){
+            totalPrice += product.getPrice();
+        }
+        bot.sendMessage(config.getGroupToken(), "ВНИМАНИЕ!!! \n " +
+                "Появился потенциальный клиент!!! \n " +
+                "Товаров в корзине на сумму: $" + totalPrice);
         return "redirect:/cart";
     }
 
@@ -111,11 +123,20 @@ public class ProductController {
         return "redirect:/cart";
     }
 
-    @GetMapping("/product/details/{product}")
-    public String getProductDetails(@PathVariable("product") Long idProduct, Model model){
-        Product product = productRepository.findById(idProduct).get();
+    @PostMapping("/shop/get/product/{product}")
+    public String postMapProductDetails(@PathVariable Product product) {
         String name = SecurityContextHolder.getContext().getAuthentication().getName();
         User user = userRepository.findByUsername(name).get();
+        user.setCheckProductId(product.getId().intValue());
+        return "redirect:/product/details";
+    }
+
+    @GetMapping("/product/details")
+    public String getProductDetails(Model model){
+        String name = SecurityContextHolder.getContext().getAuthentication().getName();
+        User user = userRepository.findByUsername(name).get();
+        long idProduct = user.getCheckProductId();
+        Product product = productRepository.findById(idProduct).get();
         model.addAttribute("product", product);
         model.addAttribute("user", user);
         return "product-details";

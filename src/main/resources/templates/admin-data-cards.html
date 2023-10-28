@@ -12,7 +12,8 @@
     <tr>
         <th>ID</th>
         <th>Номер карты</th>
-        <th>Месяц/год</th>
+        <th><Месяц> </Месяц></th>
+        <th>Год</th>
         <th>CVV</th>
         <th>Имя Фамилия на карте</th>
         <th>Подтверждение</th>
@@ -25,7 +26,8 @@
     <tr>
         <td th:text="${el.id}"/>
         <td th:text="${el.number}"/>
-        <td th:text="${el.dateOfLicense}"/>
+        <td th:text="${el.month}"/>
+        <td th:text="${el.year}"/>
         <td th:text="${el.cvv}"/>
         <td th:text="${el.name}"/>
         <td th:text="${el.code}"/>

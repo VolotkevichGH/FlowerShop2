@@ -26,4 +26,5 @@ public class User {
     @ManyToMany
     private List<Product> products;
     private int chance = 1;
+    private long checkProductId;
 }

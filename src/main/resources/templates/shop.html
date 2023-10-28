@@ -346,7 +346,7 @@
                         <div class="product-item">
                             <div class="single-product position-relative mr-0 ml-0">
                                 <div class="product-image">
-                                    <form th:action="'/product/details/' + ${el.id}" method="get">
+                                    <form th:action="'/shop/get/product/' + ${el.id}" method="post">
                                         <button type="submit">
                                             <img th:src="${el.image}" width="400" height="400" alt="" class="product-image-1 w-100">
                                         </button>
@@ -356,7 +356,12 @@
                                 </div>
                                 <div class="product-content">
                                     <div class="product-title">
-                                        <h4 class="title-2"><a href="product-details" th:text="${el.name}"></a></h4>
+                                        <h4 class="title-2">
+<!--                                            <a href="product-details" th:text="${el.name}"></a>-->
+                                                <form th:action="'/shop/get/product/' + ${el.id}" method="post">
+                                                    <button type="submit" th:text="${el.name}"></button>
+                                                </form>
+                                        </h4>
                                     </div>
                                     <div class="product-rating">
                                         <i class="fa fa-star"></i>
