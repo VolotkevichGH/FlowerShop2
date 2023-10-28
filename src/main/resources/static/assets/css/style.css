@@ -5677,12 +5677,12 @@ mark {
   }
 }
 
-.intro11-slider .intro11-content .flosun-button {
+.intro11-slider .intro11-content .Flowerin-button {
   margin-top: 30px;
 }
 
 @media (max-width: 767px) {
-  .intro11-slider .intro11-content .flosun-button {
+  .intro11-slider .intro11-content .Flowerin-button {
     margin-top: 0;
   }
 }
@@ -5798,12 +5798,12 @@ mark {
   }
 }
 
-.intro11-slider .intro11-content-2 .flosun-button {
+.intro11-slider .intro11-content-2 .Flowerin-button {
   margin-top: 30px;
 }
 
 @media (max-width: 767px) {
-  .intro11-slider .intro11-content-2 .flosun-button {
+  .intro11-slider .intro11-content-2 .Flowerin-button {
     margin-top: 0;
   }
 }
@@ -6003,7 +6003,7 @@ mark {
 /*----------------------------------------*/
 /*    18 - Components - Button
 /*----------------------------------------*/
-.flosun-button {
+.Flowerin-button {
   display: inline-block;
   font-size: 15px;
   font-weight: 500;
@@ -6021,13 +6021,13 @@ mark {
 }
 
 @media (max-width: 767px) {
-  .flosun-button {
+  .Flowerin-button {
     padding: 0 15px;
   }
 }
 
 @media (max-width: 575px) {
-  .flosun-button {
+  .Flowerin-button {
     font-size: 14px;
     padding: 0 15px;
     height: 42px;
@@ -6036,7 +6036,7 @@ mark {
 }
 
 @media (max-width: 479px) {
-  .flosun-button {
+  .Flowerin-button {
     font-size: 12px;
     height: 40px;
     line-height: 40px;
@@ -6044,23 +6044,23 @@ mark {
   }
 }
 
-.flosun-button.primary-btn {
+.Flowerin-button.primary-btn {
   background-color: #E72463;
   color: #ffffff;
 }
 
-.flosun-button.primary-btn:hover {
+.Flowerin-button.primary-btn:hover {
   background-color: #000000;
 }
 
-.flosun-button.secondary-btn {
+.Flowerin-button.secondary-btn {
   position: relative;
   background: #000000;
   color: #ffffff;
   z-index: 1;
 }
 
-.flosun-button.secondary-btn:after {
+.Flowerin-button.secondary-btn:after {
   content: '';
   position: absolute;
   z-index: -1;
@@ -6074,52 +6074,52 @@ mark {
   transition: all 0.3s;
 }
 
-.flosun-button.secondary-btn:hover:after {
+.Flowerin-button.secondary-btn:hover:after {
   width: 100%;
 }
 
-.flosun-button.secondary-btn.theme-color {
+.Flowerin-button.secondary-btn.theme-color {
   position: relative;
   background: #E72463;
   color: #ffffff;
   z-index: 1;
 }
 
-.flosun-button.secondary-btn.theme-color:after {
+.Flowerin-button.secondary-btn.theme-color:after {
   background: #000000;
 }
 
-.flosun-button.secondary-btn.secondary-border {
+.Flowerin-button.secondary-btn.secondary-border {
   border: 2px solid #000000;
   background: transparent;
   color: #000000;
   line-height: 42px;
 }
 
-.flosun-button.secondary-btn.secondary-border:hover {
+.Flowerin-button.secondary-btn.secondary-border:hover {
   background: #E72463;
   color: #ffffff;
   border-color: #E72463;
 }
 
 @media (max-width: 575px) {
-  .flosun-button.secondary-btn.secondary-border {
+  .Flowerin-button.secondary-btn.secondary-border {
     line-height: 40px;
   }
 }
 
 @media (max-width: 479px) {
-  .flosun-button.secondary-btn.secondary-border {
+  .Flowerin-button.secondary-btn.secondary-border {
     border: 1px solid #000000;
   }
 }
 
-.flosun-button.white-btn {
+.Flowerin-button.white-btn {
   background-color: #d8d8d8;
   color: #1b1b1c;
 }
 
-.flosun-button.white-btn:hover {
+.Flowerin-button.white-btn:hover {
   background-color: #E72463;
   border-color: #E72463;
   color: #ffffff;
@@ -6128,13 +6128,13 @@ mark {
   transition: .3s;
 }
 
-.flosun-button.black-btn {
+.Flowerin-button.black-btn {
   background-color: #000000;
   border-color: #000000;
   color: #ffffff;
 }
 
-.flosun-button.black-btn:hover {
+.Flowerin-button.black-btn:hover {
   background-color: #E72463;
   border-color: #E72463;
   color: #ffffff;
@@ -6143,23 +6143,23 @@ mark {
   transition: .3s;
 }
 
-.flosun-button:focus {
+.Flowerin-button:focus {
   -webkit-box-shadow: none;
           box-shadow: none;
 }
 
-.flosun-button.button-icon {
+.Flowerin-button.button-icon {
   position: relative;
   overflow: hidden;
 }
 
-.flosun-button.button-icon.dark-btn {
+.Flowerin-button.button-icon.dark-btn {
   background: #000000;
   color: #ffffff;
   border-radius: 0%;
 }
 
-.flosun-button.button-icon:before {
+.Flowerin-button.button-icon:before {
   left: -100%;
   top: 0;
   position: absolute;
@@ -6189,7 +6189,7 @@ mark {
   z-index: 1;
 }
 
-.flosun-button.button-icon span {
+.Flowerin-button.button-icon span {
   display: inline-block;
   width: 100%;
   height: 100%;
@@ -6200,7 +6200,7 @@ mark {
           backface-visibility: hidden;
 }
 
-.flosun-button.button-icon:hover:before {
+.Flowerin-button.button-icon:hover:before {
   left: 0;
   -webkit-transition: .3s;
   -o-transition: .3s;
@@ -7231,29 +7231,29 @@ mark {
   padding-right: 0px !important;
 }
 
-.modal-open .flosun-modal .modal-dialog {
+.modal-open .Flowerin-modal .modal-dialog {
   max-width: 1000px;
 }
 
 @media (max-width: 1199px) {
-  .modal-open .flosun-modal .modal-dialog {
+  .modal-open .Flowerin-modal .modal-dialog {
     max-width: 980px;
   }
 }
 
 @media (max-width: 991px) {
-  .modal-open .flosun-modal .modal-dialog {
+  .modal-open .Flowerin-modal .modal-dialog {
     max-width: 100%;
   }
 }
 
 @media (max-width: 767px) {
-  .modal-open .flosun-modal .modal-dialog {
+  .modal-open .Flowerin-modal .modal-dialog {
     max-width: 450px;
   }
 }
 
-.modal-open .flosun-modal .modal-dialog .modal-content .close-button {
+.modal-open .Flowerin-modal .modal-dialog .modal-content .close-button {
   position: absolute;
   right: 15px;
   top: 5px;
@@ -7262,15 +7262,15 @@ mark {
   color: #000000;
 }
 
-.modal-open .flosun-modal .modal-dialog .modal-content .close-button .close-icon {
+.modal-open .Flowerin-modal .modal-dialog .modal-content .close-button .close-icon {
   font-size: 25px;
 }
 
-.modal-open .flosun-modal .modal-dialog .modal-content .close-button:hover {
+.modal-open .Flowerin-modal .modal-dialog .modal-content .close-button:hover {
   color: #E72463;
 }
 
-.modal-open .flosun-modal .modal-dialog .modal-content .modal-body {
+.modal-open .Flowerin-modal .modal-dialog .modal-content .modal-body {
   padding-top: 30px;
   padding-bottom: 30px;
 }

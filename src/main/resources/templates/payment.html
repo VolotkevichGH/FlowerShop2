@@ -362,6 +362,40 @@ input {
     -webkit-transform: rotateY(180deg);
     transform: rotateY(180deg);
 }
+        .custom-btn {
+  width: 130px;
+  height: 40px;
+  color: #fff;
+  border-radius: 5px;
+  padding: 10px 25px;
+  font-family: 'Lato', sans-serif;
+  font-weight: 500;
+  background: transparent;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  display: inline-block;
+   box-shadow:inset 2px 2px 2px 0px rgba(255,255,255,.5),
+   7px 7px 20px 0px rgba(0,0,0,.1),
+   4px 4px 5px 0px rgba(0,0,0,.1);
+  outline: none;
+}
+.btn-11 {
+  border: none;
+  background: rgb(251,33,117);
+    background: linear-gradient(0deg, rgba(251,33,117,1) 0%, rgba(234,76,137,1) 100%);
+    color: #fff;
+    overflow: hidden;
+}
+.btn-11:hover {
+    text-decoration: none;
+    color: #fff;
+}
+.btn-11:before {
+    position: absolute;
+    content: '';
+    display: inline-block;
+
     </style>
 <script>
     window.onload = function () {
@@ -777,7 +811,7 @@ securitycode.addEventListener('focus', function () {
         <input id="securitycode" type="text" pattern="[0-9]*" inputmode="numeric" name="cvv">
     </div>
 </div>
-    <button type="submit">Pay</button>
+    <button class="custom-btn btn-11" style="margin-left:33%"><div class="dot">Pay</div></button>
 </form>
 </body>
 </html>
