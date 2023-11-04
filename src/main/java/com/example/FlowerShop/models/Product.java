@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.Set;
 
 @Entity
@@ -20,9 +21,10 @@ public class Product {
     private String name;
     private Long price;
     private String descrip;
-    private Long previewImageId;
     private String description;
-    private Long backprice;
     private String image;
     private Long purchasesCount = 0L;
+    @ManyToOne
+    private ProductType type;
+    private LocalDateTime dateOfCreate;
 }

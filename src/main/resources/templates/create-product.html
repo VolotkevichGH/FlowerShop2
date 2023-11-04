@@ -1,5 +1,5 @@
 <!DOCTYPE>
->
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Bootstrap ReCaptcha Form | BootstrapTema</title>
     <meta charset="UTF-8">
@@ -19,7 +19,7 @@
             <h1 class="text-center">Добавление нового товара</h1>
 
 
-            <form id="contact-form" method="post" action="contact.php" role="form">
+            <form id="contact-form" method="post" action="/admin/create/product" role="form">
 
                 <div class="messages"></div>
 
@@ -41,10 +41,14 @@
                             </div>
                         </div>
                         <div class="col-md-6">
+                            <label for="form_type">Тип товара</label>
                             <div class="form-group">
-                                <label for="form_lastname">Старая Цена товара</label>
-                                <input id="form_backprice" type="text" name="backprice" class="form-control" placeholder="Please enter your price" required="required">
-                                <div class="help-block with-errors"></div>
+                                <ul th:each="type : ${types}">
+                                    <li>
+                                     <label th:text="${type.name}"></label>
+                                     <input id="form_type" type="checkbox" name="type" th:value="${type.name}">
+                                    </li>
+                                </ul>
                             </div>
                         </div>
 

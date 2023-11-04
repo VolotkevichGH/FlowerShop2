@@ -17,11 +17,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.*;
 import java.util.List;
-import java.util.Set;
-import java.util.TreeSet;
 
 @Controller
 @RequiredArgsConstructor
@@ -32,7 +29,7 @@ public class ProductController {
     private final TelegramBot bot;
     private final BotConfig config;
 
-    @GetMapping("/shop")
+    @GetMapping("/")
     public String adminGet(Model model) {
         String name = SecurityContextHolder.getContext().getAuthentication().getName();
         boolean userIsActive = userRepository.findByUsername(name).isPresent();
@@ -42,17 +39,27 @@ public class ProductController {
             model.addAttribute("items", userProducts);
             model.addAttribute("user", user);
             List<Product> myProducts = user.getProducts();
-            model.addAttribute("myProd", myProducts);
             float totalPrice = 0f;
             for (Product product : myProducts) {
                 totalPrice += product.getPrice();
             }
+            model.addAttribute("myProd", myProducts);
+            HashMap<Product, Integer> mapa = new HashMap<>();
+
+
+            for (int i= 0; i < myProducts.size(); i++){
+                Product fullProduct = myProducts.get(i);
+                mapa.put(fullProduct, myProducts.stream().filter(product -> product.equals(fullProduct)).toList().size());
+            }
+
+
+            model.addAttribute("myProducts", mapa);
             model.addAttribute("totalPrice", totalPrice);
         } else {
             model.addAttribute("items", 0);
         }
         model.addAttribute("products", productRepository.findAll());
-        return "shop";
+        return "shop-left-sidebar";
     }
 
     @PostMapping("/add-product/{product}")
@@ -78,7 +85,41 @@ public class ProductController {
         } else {
             return "redirect:/login";
         }
-        return "redirect:/shop";
+        return "redirect:/";
+    }
+
+
+    @PostMapping("/product-add/{product}")
+    public String addProductInCart(@PathVariable Product product, @RequestParam String quantity) {
+        String name = SecurityContextHolder.getContext().getAuthentication().getName();
+        boolean userIsActive = userRepository.findByUsername(name).isPresent();
+        if (userIsActive) {
+            User user = userRepository.findByUsername(name).get();
+            int finalQuantity = Integer.parseInt(quantity);
+            if (user.getProducts().isEmpty()) {
+                ArrayList<Product> products = new ArrayList<>();
+                for (int i = 0; i < finalQuantity; i++) {
+                    products.add(product);
+                }
+                user.setProducts(products);
+                userRepository.save(user);
+            } else {
+                if (user.getProducts().contains(product)) {
+                    for (int i = 0; i < finalQuantity; i++) {
+                        user.getProducts().add(product);
+                        productRepository.save(product);
+                    }
+                } else {
+                    for (int i = 0; i < finalQuantity; i++) {
+                        user.getProducts().add(product);
+                        userRepository.save(user);
+                    }
+                }
+            }
+        } else {
+            return "redirect:/login";
+        }
+        return "redirect:/";
     }
 
 
@@ -123,23 +164,16 @@ public class ProductController {
         return "redirect:/cart";
     }
 
-    @PostMapping("/shop/get/product/{product}")
-    public String postMapProductDetails(@PathVariable Product product) {
-        String name = SecurityContextHolder.getContext().getAuthentication().getName();
-        User user = userRepository.findByUsername(name).get();
-        user.setCheckProductId(product.getId().intValue());
-        return "redirect:/product/details";
-    }
 
-    @GetMapping("/product/details")
-    public String getProductDetails(Model model){
+    @GetMapping("/product-details-{product}")
+    public String getProductDetails(Model model, @PathVariable Product product){
         String name = SecurityContextHolder.getContext().getAuthentication().getName();
         User user = userRepository.findByUsername(name).get();
-        long idProduct = user.getCheckProductId();
-        Product product = productRepository.findById(idProduct).get();
         model.addAttribute("product", product);
+        float backprice = product.getPrice() + 101;
+        model.addAttribute("backprice", backprice);
         model.addAttribute("user", user);
-        return "product-details";
+        return "product-left-sidebar";
     }
 
 }

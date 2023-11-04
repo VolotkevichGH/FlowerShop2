@@ -29,11 +29,11 @@ public class SpringSecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable).authorizeRequests()
-                .requestMatchers("/login", "/", "/register")
+                .requestMatchers("/login","/register")
                 .permitAll()
                 .requestMatchers("/admin/**")
                 .hasAnyRole("ADMIN")
-                .requestMatchers("/cart/**", "/checkout/**", "/myaccount/**", "/shop/**", "/product/**", "/payment")
+                .requestMatchers("/cart/**", "/checkout/**", "/myaccount/**", "/shop/**", "/product/**", "/payment", "/", "/product-details-**")
                 .hasAnyRole("USER", "ADMIN");
 //                .anyRequest()
 //                .authenticated();
