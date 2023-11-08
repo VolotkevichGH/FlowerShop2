@@ -23,6 +23,7 @@ public class Product {
     private String descrip;
     private String description;
     private String image;
+    private Long totalPrice;
     private Long purchasesCount = 0L;
     @ManyToOne
     private ProductType type;

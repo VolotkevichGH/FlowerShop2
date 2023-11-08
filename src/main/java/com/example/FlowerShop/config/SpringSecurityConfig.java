@@ -33,7 +33,7 @@ public class SpringSecurityConfig {
                 .permitAll()
                 .requestMatchers("/admin/**")
                 .hasAnyRole("ADMIN")
-                .requestMatchers("/cart/**", "/checkout/**", "/myaccount/**", "/shop/**", "/product/**", "/payment", "/", "/product-details-**")
+                .requestMatchers("/cart/**", "/checkout/**", "/myaccount/**", "/shop/**", "/product/**", "/product-details-**")
                 .hasAnyRole("USER", "ADMIN");
 //                .anyRequest()
 //                .authenticated();

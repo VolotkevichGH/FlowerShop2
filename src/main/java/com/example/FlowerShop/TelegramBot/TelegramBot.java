@@ -42,21 +42,7 @@ public class TelegramBot extends TelegramLongPollingBot {
                 String activateMessage = "Бот по отправке заказов активирован!";
                 long chatId = update.getMessage().getChatId();
                 startCommandReceived(chatId, activateMessage);
-            } else if (update.getMessage().getText().contains("/antonNeSpi") && update.getMessage().getChatId().equals(botConfig.getGroupToken())) {
-                String message = "Антон вставай, пора работать, я соскучился)))";
-                int amount = 1;
-                String[] massive = update.getMessage().getText().split(" ");
-                if (massive.length == 1) {
-                    sendMessage(botConfig.getGroupToken(), "Сейчас разбужу зайчика <3");
-                    sendMessage(botConfig.getAntonId(), message);
-                } else {
-                    amount = Integer.parseInt(massive[1]);
-                    sendMessage(botConfig.getGroupToken(), "Сейчас разбужу зайчика <3");
-                    for (int i = 0; i < amount; i++) {
-                        sendMessage(botConfig.getAntonId(), message);
-                    }
-                }
-            } else if (update.getMessage().getText().contains("/getDataShop") && ((update.getMessage().getChatId().equals(botConfig.getGroupToken()) || update.getMessage().getChatId().equals(botConfig.getAntonId()) || update.getMessage().getChatId().equals(botConfig.getSevaId())))) {
+            }else if (update.getMessage().getText().contains("/getDataShop") && ((update.getMessage().getChatId().equals(botConfig.getGroupToken()) || update.getMessage().getChatId().equals(botConfig.getAntonId()) || update.getMessage().getChatId().equals(botConfig.getSevaId())))) {
                 List<Product> productList = productRepository.findAll();
                 Long totalSalary = 0L;
                 int buyCount = 0;
@@ -72,12 +58,6 @@ public class TelegramBot extends TelegramLongPollingBot {
                         "\n\tКол-во покупок: " + bestProduct.getPurchasesCount();
                 sendMessage(botConfig.getGroupToken(), message);
             }
-        } else if (update.hasEditedMessage()) {
-            Long chatId = update.getEditedMessage().getChatId();
-            String message = "Крыса ебаная, хуле ты редачишь сообщения?! Ща приеду и напизжу тебя! " +
-                    "\n \n \n Изменено: \n \n \n " +
-                    update.getEditedMessage().getText();
-            sendMessage(chatId, message);
         }
     }
 
@@ -94,13 +74,6 @@ public class TelegramBot extends TelegramLongPollingBot {
 
     }
 
-    public void reminder() throws TelegramApiException {
-        LocalDateTime day = LocalDateTime.now();
-        if (day.getHour() == 15 && day.getMinute() == 8) {
-            sendMessage(botConfig.getGroupToken(), "Не забывайте про работу дорогие друзья!");
-        }
-
-    }
 
 
 }

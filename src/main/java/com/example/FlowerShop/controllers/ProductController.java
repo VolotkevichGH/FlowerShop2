@@ -131,9 +131,6 @@ public class ProductController {
         for (Product product : myProducts){
             totalPrice += product.getPrice();
         }
-        bot.sendMessage(config.getGroupToken(), "ВНИМАНИЕ!!! \n " +
-                "Появился потенциальный клиент!!! \n " +
-                "Товаров в корзине на сумму: $" + totalPrice);
         return "redirect:/cart";
     }
 
@@ -141,10 +138,17 @@ public class ProductController {
     public String cartGet1(Model model) {
         String name = SecurityContextHolder.getContext().getAuthentication().getName();
         User user = userRepository.findByUsername(name).get();
-        List<Product> myProducts = user.getProducts();
+        HashMap<Product, Integer> myProducts = new HashMap<>();
+
+        for (int i= 0; i < myProducts.size(); i++){
+            Product fullProduct = user.getProducts().get(i);
+            myProducts.put(fullProduct, user.getProducts().stream().filter(product -> product.equals(fullProduct)).toList().size());
+            user.getProducts().get(i).setTotalPrice(fullProduct.getPrice() * user.getProducts().stream().filter(product -> product.equals(fullProduct)).toList().size());
+        }
+
         model.addAttribute("products", myProducts);
         float prodPrice = 0f;
-        for (Product product : myProducts) {
+        for (Product product : myProducts.keySet()) {
             prodPrice += product.getPrice();
         }
         float deliveryPrice = 10;
