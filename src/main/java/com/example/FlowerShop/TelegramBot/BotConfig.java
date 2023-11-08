@@ -8,8 +8,8 @@ import org.springframework.context.annotation.Configuration;
 public class BotConfig {
 
     private String botName = "AdminFlowerin";
-    private String botToken = "6925693875:AAHiOh5w4NubF5Dt5X7HmlroyTDsvc0gY-c";
-    private Long sevaId = 998920048L;
-    private Long antonId = 1098509577L;
-    private Long groupToken = -4049913301L;
+    private String botToken = "";
+    private Long sevaId = 123123123L;
+    private Long antonId = 213123123123L;
+    private Long groupToken = -123123123123L;
 }
